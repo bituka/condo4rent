@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Utilities Computation: Latest Added</title>
+<!-- Bootstrap -->
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+
+<!-- Optional theme 
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+-->
+<!-- Custom styles for this template -->
+    <link href="//getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <!-- <link href="stylesheets/jumbotron-narrow.css" rel="stylesheet"> YEHEY! Working!!! 
+      sa huli pala dapat yung - 
+      url: /.*
+      script: condo.application
+      - sa app.yapml
+    -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+<link rel="stylesheet" href="stylesheets/main.css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+</head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <!--
+        <ul class="nav nav-pills pull-right">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+        -->
+        <h3 class="text-muted">Makati Condo 4 Rent</h3>
+      </div>
+
+      <div class="containier">
+        <h3>Meter Readings:</h3>
+        <p class="lead">
+        <!--  {{utilitiescomputation.key().id()}} -->
+          <div class=""><label>Tenant Name:</label> {{utilitiescomputation.tenant_name}}</div>
+          <div class=""><label>Electric Checkin Reading:</label> {{utilitiescomputation.checkin_elec}}</div>
+          <div class=""><label>Electric Checkout Reading:</label> {{utilitiescomputation.checkout_elec}}</div>
+          <div class="hlight-blue"><label>Electricity Consumed:</label> {{elec_consume}}</div>
+          <div class=""><label>Water Checkin Reading:</label> {{utilitiescomputation.checkin_water}}</div>
+          <div class=""><label>Water Checkin Reading:</label> {{utilitiescomputation.checkout_water}}</div>
+          <div class="hlight-blue"><label>Water Consumed:</label> {{water_consume}}</div>
+          <div class=""><label>Electricity Charge(Charge per Unit = {{elec_cpu}} PHP):</label> {{elec_charge}} PHP</div>
+          <div class=""><label>Water Charge(Charge per Unit = {{water_cpu}} PHP):</label> {{water_charge}} PHP</div>
+          <div class="hlight-red"><label>Total Utilities Charges:</label> {{total_utilities_charge}} PHP</div>
+          <a href="/emailutilitiesdraft?checkin_elec={{utilitiescomputation.checkin_elec}}&checkout_elec={{utilitiescomputation.checkout_elec}}">Send this to Tenant's Email</a>
+
+        </p>
+      </div>
+
+      <div class="footer">
+        <p>&copy; Makati Condo 4 Rent</p>
+      </div>
+
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- Latest compiled and minified JavaScript -->
+    
+  </body>
+</html>
