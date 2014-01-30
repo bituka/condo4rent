@@ -5,6 +5,7 @@
 <!-- Bootstrap -->
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
 
 <!-- Optional theme 
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
@@ -47,12 +48,27 @@
           <div class=""><label>Electric Checkout Reading:</label> {{utilitiescomputation.checkout_elec}}</div>
           <div class="hlight-blue"><label>Electricity Consumed:</label> {{elec_consume}}</div>
           <div class=""><label>Water Checkin Reading:</label> {{utilitiescomputation.checkin_water}}</div>
-          <div class=""><label>Water Checkin Reading:</label> {{utilitiescomputation.checkout_water}}</div>
+          <div class=""><label>Water Checkout Reading:</label> {{utilitiescomputation.checkout_water}}</div>
           <div class="hlight-blue"><label>Water Consumed:</label> {{water_consume}}</div>
           <div class=""><label>Electricity Charge(Charge per Unit = {{elec_cpu}} PHP):</label> {{elec_charge}} PHP</div>
           <div class=""><label>Water Charge(Charge per Unit = {{water_cpu}} PHP):</label> {{water_charge}} PHP</div>
           <div class="hlight-red"><label>Total Utilities Charges:</label> {{total_utilities_charge}} PHP</div>
-          <a href="/emailutilitiesdraft?checkin_elec={{utilitiescomputation.checkin_elec}}&checkout_elec={{utilitiescomputation.checkout_elec}}">Send this to Tenant's Email</a>
+          <!--<a href="/emailutilitiesdraft?checkin_elec={{utilitiescomputation.checkin_elec}}&checkout_elec={{utilitiescomputation.checkout_elec}}&checkin_water={{utilitiescomputation.checkin_water}}&checkout_water={{utilitiescomputation.checkout_water}}&elec_consume={{elec_consume}}&water_consume={{water_consume}}&tenant_name={{utilitiescomputation.tenant_name}}&elec_cpu={{elec_cpu}}&water_cpu{{water_cpu}}">Send Email</a> -->
+          <form action="/sendutilitiestenant" method="post">
+            <input type="hidden" name="tenant_name" value="{{utilitiescomputation.tenant_name}}" />
+            <input type="hidden" name="checkin_elec" value="{{utilitiescomputation.checkin_elec}}" />
+            <input type="hidden" name="elec_consume" value="{{utilitiescomputation.elec_consume}}" />
+            <input type="hidden" name="checkin_water" value="{{utilitiescomputation.checkin_water}}" />
+            <input type="hidden" name="checkout_water" value="{{utilitiescomputation.checkout_water}}" />
+            <input type="hidden" name="water_consume" value="{{utilitiescomputation.water_consume}}" />
+            <input type="hidden" name="elec_cpu" value="{{utilitiescomputation.elec_cpu}}" />
+            <input type="hidden" name="elec_charge" value="{{utilitiescomputation.elec_charge}}" />
+            <input type="hidden" name="water_cpu" value="{{utilitiescomputation.water_cpu}}" />
+            <input type="hidden" name="water_charge" value="{{utilitiescomputation.water_charge}}" />
+            <input type="hidden" name="total_utilities_charge" value="{{utilitiescomputation.total_utilities_charge}}" />
+            <div><label>Send to Email:</label><br /><input class="input" type="text" name="to_email" /></div>
+            <br /><input class="btn" type="submit" value="Send">
+          </form>
 
         </p>
       </div>

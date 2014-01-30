@@ -98,16 +98,46 @@ class LatestUtilityEntry(webapp2.RequestHandler):
         self.response.out.write(template.render(template_values)) 
 
 class EmailUtilitiesDraft(webapp2.RequestHandler):
-    def get(self):
+#    def get(self):
 
-        user = users.get_current_user()
+#         user = users.get_current_user()
 
+#         if (user and user.nickname() == 'makaticondo4rent'):
+           
+#            checkin_elec = self.request.get('checkin_elec')
+#            checkout_elec = self.request.get('checkout_elec')
+#            checkin_water = self.request.get('checkin_elec')
+#            checkout_water = self.request.get('checkout_water')
+#            elec_consume  = self.request.get('elec_consume')
+#            water_consume = self.request.get('water_consume')
+#            elec_cpu = self.request.get('elec_cpu')
+#            water_cpu = self.request.get('water_cpu')
+
+#            template_values = {
+#             'elec_consume' : elec_consume,
+#             'water_consume' : water_consume,
+#             'water_charge' : water_charge,  
+#             'elec_charge' : elec_charge,   
+#             'elec_cpu' : elec_cpu,
+#             'water_cpu' : water_cpu,
+#             'total_utilities_charge' : total_utilities_charge
+#             }
+#         else:
+#             self.redirect(users.create_login_url(self.request.uri))
+
+    def post(self):
         if (user and user.nickname() == 'makaticondo4rent'):
+
            checkin_elec = self.request.get('checkin_elec')
            checkout_elec = self.request.get('checkout_elec')
-#           print user
-           print checkin_elec
-           print checkout_elec      
+           checkin_water = self.request.get('checkin_elec')
+           checkout_water = self.request.get('checkout_water')
+           elec_consume  = self.request.get('elec_consume')
+           water_consume = self.request.get('water_consume')
+           elec_cpu = self.request.get('elec_cpu')
+           water_cpu = self.request.get('water_cpu')
+
+
         else:
             self.redirect(users.create_login_url(self.request.uri))
 
