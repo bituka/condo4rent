@@ -54,7 +54,7 @@
           <div class=""><label>Water Charge(Charge per Unit = {{water_cpu}} PHP):</label> {{water_charge}} PHP</div>
           <div class="hlight-red"><label>Total Utilities Charges:</label> {{total_utilities_charge}} PHP</div>
           <!--<a href="/emailutilitiesdraft?checkin_elec={{utilitiescomputation.checkin_elec}}&checkout_elec={{utilitiescomputation.checkout_elec}}&checkin_water={{utilitiescomputation.checkin_water}}&checkout_water={{utilitiescomputation.checkout_water}}&elec_consume={{elec_consume}}&water_consume={{water_consume}}&tenant_name={{utilitiescomputation.tenant_name}}&elec_cpu={{elec_cpu}}&water_cpu{{water_cpu}}">Send Email</a> -->
-          <form action="/sendutilitiestenant" method="post">
+          <form action="/sendutilitiestenant" method="POST">
             <input type="hidden" name="tenant_name" value="{{utilitiescomputation.tenant_name}}" />
             <input type="hidden" name="checkin_elec" value="{{utilitiescomputation.checkin_elec}}" />
             <input type="hidden" name="elec_consume" value="{{utilitiescomputation.elec_consume}}" />

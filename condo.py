@@ -143,23 +143,35 @@ class EmailUtilitiesDraft(webapp2.RequestHandler):
 
 #send utilities computation to tenant
 class SendUtilitiesTenant(webapp2.RequestHandler):
+
     def post(self):
 
         user = users.get_current_user()
 
         if (user and user.nickname() == 'makaticondo4rent'):
+
+            checkin_elec = self.request.get('checkin_elec')
+            checkout_elec = self.request.get('checkout_elec')
+            checkin_water = self.request.get('checkin_elec')
+            checkout_water = self.request.get('checkout_water')
+            elec_consume  = self.request.get('elec_consume')
+            water_consume = self.request.get('water_consume')
+            elec_cpu = self.request.get('elec_cpu')
+            water_cpu = self.request.get('water_cpu')
+            to_email = self.request.get('to_email')
+
             message = mail.EmailMessage()
             message.sender = user.email()
-            message.subject = ""
-            message.to = to_addr
-            message.body = """
+            message.subject = "Test Mail"
+            message.to = to_email
+            message.html = """
                 <html>
                 <header><title></title></header>
-                <body>Test Email</body>
+                <body> %s   </body>
                 </html>
-                """ 
-            message.send()
-              
+                """ % checkin_elec
+            message.send() 
+        
         else:
             
             self.redirect(users.create_login_url(self.request.uri))
