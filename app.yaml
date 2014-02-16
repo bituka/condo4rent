@@ -15,8 +15,11 @@ handlers:
 - url: /img
   static_dir: img  
 
+- url: /condomail
+  script: condomail.app
+
 - url: /.*
-  script: condo.application
+  script: condo.app
 
 libraries:                  
 - name: webapp2

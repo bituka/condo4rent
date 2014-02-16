@@ -54,18 +54,19 @@
           <div class=""><label>Water Charge(Charge per Unit = {{water_cpu}} PHP):</label> {{water_charge}} PHP</div>
           <div class="hlight-red"><label>Total Utilities Charges:</label> {{total_utilities_charge}} PHP</div>
           <!--<a href="/emailutilitiesdraft?checkin_elec={{utilitiescomputation.checkin_elec}}&checkout_elec={{utilitiescomputation.checkout_elec}}&checkin_water={{utilitiescomputation.checkin_water}}&checkout_water={{utilitiescomputation.checkout_water}}&elec_consume={{elec_consume}}&water_consume={{water_consume}}&tenant_name={{utilitiescomputation.tenant_name}}&elec_cpu={{elec_cpu}}&water_cpu{{water_cpu}}">Send Email</a> -->
-          <form action="/sendutilitiestenant" method="POST">
+          <form action="/condomail" method="POST">
             <input type="hidden" name="tenant_name" value="{{utilitiescomputation.tenant_name}}" />
             <input type="hidden" name="checkin_elec" value="{{utilitiescomputation.checkin_elec}}" />
-            <input type="hidden" name="elec_consume" value="{{utilitiescomputation.elec_consume}}" />
+            <input type="hidden" name="checkout_elec" value="{{utilitiescomputation.checkout_elec}}" />
+            <input type="hidden" name="elec_consume" value="{{elec_consume}}" />
             <input type="hidden" name="checkin_water" value="{{utilitiescomputation.checkin_water}}" />
             <input type="hidden" name="checkout_water" value="{{utilitiescomputation.checkout_water}}" />
-            <input type="hidden" name="water_consume" value="{{utilitiescomputation.water_consume}}" />
-            <input type="hidden" name="elec_cpu" value="{{utilitiescomputation.elec_cpu}}" />
-            <input type="hidden" name="elec_charge" value="{{utilitiescomputation.elec_charge}}" />
-            <input type="hidden" name="water_cpu" value="{{utilitiescomputation.water_cpu}}" />
-            <input type="hidden" name="water_charge" value="{{utilitiescomputation.water_charge}}" />
-            <input type="hidden" name="total_utilities_charge" value="{{utilitiescomputation.total_utilities_charge}}" />
+            <input type="hidden" name="water_consume" value="{{water_consume}}" />
+            <input type="hidden" name="elec_cpu" value="{{elec_cpu}}" />
+            <input type="hidden" name="elec_charge" value="{{elec_charge}}" />
+            <input type="hidden" name="water_cpu" value="{{water_cpu}}" />
+            <input type="hidden" name="water_charge" value="{{water_charge}}" />
+            <input type="hidden" name="total_utilities_charge" value="{{total_utilities_charge}}" />
             <div><label>Send to Email:</label><br /><input class="input" type="text" name="to_email" /></div>
             <br /><input class="btn" type="submit" value="Send">
           </form>
