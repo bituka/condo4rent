@@ -96,13 +96,24 @@ class LatestUtilityEntry(webapp2.RequestHandler):
         template = jinja_environment.get_template('company/latestutilityentry_added.html')
         self.response.out.write(template.render(template_values)) 
 
+#display balance for ate dhanna
+class BalancePage(webapp2.RequestHandler):
+    def get(self):   
+        
+        template_values = {
+          
+        }
+        
+        template = jinja_environment.get_template('company/balance.html')
+        self.response.out.write(template.render(template_values)) 
+
         
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/latestutilityentry', LatestUtilityEntry),
     ('/utilitiescomputation', UtilitiesComputationPage),
-    
+    ('/balance', BalancePage),
 ], debug=True)
 
 
