@@ -21,6 +21,7 @@ class UtilitiesComputation(db.Model):
     checkout_water = db.FloatProperty()
     tenant_name = db.StringProperty()
     date = db.DateTimeProperty(auto_now_add=True)
+    deposit = db.FloatProperty()
     
 
 #contollers
@@ -51,6 +52,7 @@ class UtilitiesComputationPage(webapp2.RequestHandler):
         utilitiescomputation.checkin_water = float(self.request.get('checkin_water'))
         utilitiescomputation.checkout_elec = float(self.request.get('checkout_elec'))
         utilitiescomputation.checkout_water = float(self.request.get('checkout_water'))
+        utilitiescomputation.deposit = float(self.request.get('deposit'))
         
         utilitiescomputation.put()
     #    item.key().id()
@@ -82,6 +84,8 @@ class LatestUtilityEntry(webapp2.RequestHandler):
         water_charge = water_cpu * water_consume
 
         total_utilities_charge = round(elec_charge + water_charge, 2)
+        refund = utilitiescomputation.deposit - total_utilities_charge
+
         template_values = {
             'elec_consume' : elec_consume,
             'water_consume' : water_consume,
@@ -90,7 +94,8 @@ class LatestUtilityEntry(webapp2.RequestHandler):
             'elec_charge' : elec_charge,   
             'elec_cpu' : elec_cpu,
             'water_cpu' : water_cpu,
-            'total_utilities_charge' : total_utilities_charge
+            'total_utilities_charge' : total_utilities_charge,
+            'refund' : refund
         }
         
         template = jinja_environment.get_template('company/latestutilityentry_added.html')

@@ -44,6 +44,7 @@
         <p class="lead">
         <!--  {{utilitiescomputation.key().id()}} -->
           <div class=""><label>Tenant Name:</label> {{utilitiescomputation.tenant_name}}</div>
+          <div class=""><label>Deposit:</label> {{utilitiescomputation.deposit}}</div>
           <div class=""><label>Electric Checkin Reading:</label> {{utilitiescomputation.checkin_elec}}</div>
           <div class=""><label>Electric Checkout Reading:</label> {{utilitiescomputation.checkout_elec}}</div>
           <div class="hlight-blue"><label>Electricity Consumed:</label> {{elec_consume}}</div>
@@ -53,6 +54,7 @@
           <div class=""><label>Electricity Charge(Charge per Unit = {{elec_cpu}} PHP):</label> {{elec_charge}} PHP</div>
           <div class=""><label>Water Charge(Charge per Unit = {{water_cpu}} PHP):</label> {{water_charge}} PHP</div>
           <div class="hlight-red"><label>Total Utilities Charges:</label> {{total_utilities_charge}} PHP</div>
+           <div class="hlight-red"><label>Refund:</label> {{refund}} PHP</div>
           <!--<a href="/emailutilitiesdraft?checkin_elec={{utilitiescomputation.checkin_elec}}&checkout_elec={{utilitiescomputation.checkout_elec}}&checkin_water={{utilitiescomputation.checkin_water}}&checkout_water={{utilitiescomputation.checkout_water}}&elec_consume={{elec_consume}}&water_consume={{water_consume}}&tenant_name={{utilitiescomputation.tenant_name}}&elec_cpu={{elec_cpu}}&water_cpu{{water_cpu}}">Send Email</a> -->
           <form action="/condomail" method="POST">
             <input type="hidden" name="tenant_name" value="{{utilitiescomputation.tenant_name}}" />
@@ -67,6 +69,8 @@
             <input type="hidden" name="water_cpu" value="{{water_cpu}}" />
             <input type="hidden" name="water_charge" value="{{water_charge}}" />
             <input type="hidden" name="total_utilities_charge" value="{{total_utilities_charge}}" />
+            <input type="hidden" name="deposit" value="{{utilitiescomputation.deposit}}" />
+            <input type="hidden" name="refund" value="{{refund}}" />
             <div><label>Send to Email:</label><br /><input class="input" type="text" name="to_email" /></div>
             <br /><input class="btn btn-lg btn-success" type="submit" value="Send">
           </form>

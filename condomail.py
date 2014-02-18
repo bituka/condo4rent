@@ -26,6 +26,9 @@ class CondoMail(webapp2.RequestHandler):
             to_email = self.request.get('to_email')
             elec_charge = self.request.get('elec_charge')
             water_charge = self.request.get('water_charge')
+            total_utilities_charge = self.request.get('total_utilities_charge')
+            deposit = self.request.get('deposit')
+            refund = self.request.get('refund')
 
             message = mail.EmailMessage()
             message.sender = user.email()
@@ -49,10 +52,14 @@ Consumed Water = %s
 Charges: 
 Electricity Charge(Charge per Unit = %s PHP): %s PHP
 Water Charge(Charge per Unit = %s PHP): %s PHP
+Total Utilities Charge = %s
+Deposit: %s
+Refund: %s
 
 
-
-            """ % (tenant_name, checkin_elec, checkout_elec, elec_consume, checkin_water, checkout_water, water_consume, elec_cpu, elec_charge, water_cpu, water_charge)
+            """ % (tenant_name, checkin_elec, checkout_elec, elec_consume, checkin_water, checkout_water, 
+                water_consume, elec_cpu, elec_charge, water_cpu, water_charge, 
+                total_utilities_charge, deposit, refund)
             # message.html = """
             #     <html>
             #     <header><title></title></header>
