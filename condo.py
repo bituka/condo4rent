@@ -37,19 +37,24 @@ class MainPage(webapp2.RequestHandler):
         
 class UtilitiesComputationPage(webapp2.RequestHandler):
 
-    user = users.get_current_user()
+    
 
-    if (user and user.nickname() == 'makaticondo4rent'):
+    def get(self):
 
-        def get(self):
-            template_values = {
-                
-            }
+
+        template_values = {
             
-            template = jinja_environment.get_template('company/utilities_main.html')
-            self.response.out.write(template.render(template_values))
+        }
+        
+        template = jinja_environment.get_template('company/utilities_main.html')
+        self.response.out.write(template.render(template_values))
 
-        def post(self):   
+    def post(self):   
+        
+        user = users.get_current_user()
+        
+        if (user and user.nickname() == 'makaticondo4rent'):
+          
             utilitiescomputation = UtilitiesComputation()
             utilitiescomputation.tenant_name = self.request.get('tenant_name')
             utilitiescomputation.checkin_elec = float(self.request.get('checkin_elec'))
@@ -72,17 +77,17 @@ class UtilitiesComputationPage(webapp2.RequestHandler):
             self.redirect(redirectUrl)
         #    self.redirect('/latestutilityentry', utilitiescomputation.key().id())   
 
-    else:    
-        self.redirect(users.create_login_url(self.request.uri))                 
+        else:    
+            self.redirect(users.create_login_url(self.request.uri))                 
 
 #display latest added computation after adding entry
 class LatestUtilityEntry(webapp2.RequestHandler):
 
-    user = users.get_current_user()
+    def get(self):   
 
-    if (user and user.nickname() == 'makaticondo4rent'):
+        user = users.get_current_user()
 
-        def get(self):   
+        if (user and user.nickname() == 'makaticondo4rent'):
             #cpu means charge per unit
             elec_cpu = 12
             water_cpu = 18
@@ -112,8 +117,8 @@ class LatestUtilityEntry(webapp2.RequestHandler):
             
             template = jinja_environment.get_template('company/latestutilityentry_added.html')
             self.response.out.write(template.render(template_values)) 
-    else:
-        self.redirect(users.create_login_url(self.request.uri))    
+        else:
+            self.redirect(users.create_login_url(self.request.uri))    
 
 #display balance for ate dhanna
 class BalancePage(webapp2.RequestHandler):
