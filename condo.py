@@ -23,6 +23,14 @@ class UtilitiesComputation(db.Model):
     date = db.DateTimeProperty(auto_now_add=True)
     deposit = db.FloatProperty()
     
+class Balance(db.Model):
+    
+    in_amt = db.FloatProperty()
+    out_amt = db.FloatProperty()
+    notes = db.StringProperty()
+    date_created = db.DateTimeProperty(auto_now_add=True)
+    transaction_date = db.DateTimeProperty()
+
 
 #contollers
 class MainPage(webapp2.RequestHandler):
@@ -131,6 +139,7 @@ class BalancePage(webapp2.RequestHandler):
         
         template = jinja_environment.get_template('company/balance.html')
         self.response.out.write(template.render(template_values)) 
+
 
         
 

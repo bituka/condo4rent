@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Utilities Computation</title>
+<!-- Bootstrap -->
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+
+<!-- Optional theme 
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+-->
+<!-- Custom styles for this template -->
+    <link href="//getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <!-- <link href="stylesheets/jumbotron-narrow.css" rel="stylesheet"> YEHEY! Working!!! 
+      sa huli pala dapat yung - 
+      url: /.*
+      script: condo.application
+      - sa app.yapml
+    -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+<link rel="stylesheet" href="stylesheets/main.css">
+
+</head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <!--
+        <ul class="nav nav-pills pull-right">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+        -->
+        <h3 class="text-muted">Makati Condo 4 Rent</h3>
+      </div>
+
+      <div class="jumbotron">
+        <h3>Enter Checkin and Checkout Meter Readings:</h3>
+        <p class="lead">
+          <form action="/utilitiescomputation" method="post">
+            <div><label>Tenant Name</label><input type="text" name="tenant_name" /></div>
+          <div><label>Checkin Electric</label><input type="number" step=0.01 name="checkin_elec" maxlength="20" /></div>
+          <div><label>Checkout Electric</label><input type="number" step=0.01 name="checkout_elec" maxlength="20" /></div>
+          <div><label>Checkin Water</label><input type="number" step=0.01 name="checkin_water" maxlength="20" /></div>
+          <div><label>Checkout Water</label><input type="number" step=0.01 name="checkout_water" maxlength="20" /></div>
+          <div><label>Deposit</label><input type="number" step=0.01 name="deposit" maxlength="20" /></div>
+          
+          <input type="submit" value="submit" class="btn btn-lg btn-success">
+          </form>
+        </p>
+      </div>
+
+
+      <div class="footer">
+        <p>&copy; Makati Condo 4 Rent</p>
+      </div>
+
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -39,7 +39,7 @@ Dear %s,
 
 Thank you choosing us again on your stay. Below are the readings and computation of your utilities consumed. 
 
-Electic: 
+Electric: 
 Checkin = %s
 Checkout = %s
 Consumed Electricity = %s
