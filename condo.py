@@ -25,8 +25,9 @@ class UtilitiesComputation(db.Model):
     
 class Balance(db.Model):
     
-    in_amt = db.FloatProperty()
-    out_amt = db.FloatProperty()
+    ttype = db.StringProperty()
+    amt = db.FloatProperty()
+    description = db.StringProperty()
     notes = db.StringProperty()
     date_created = db.DateTimeProperty(auto_now_add=True)
     transaction_date = db.DateTimeProperty()
@@ -140,14 +141,43 @@ class BalancePage(webapp2.RequestHandler):
         template = jinja_environment.get_template('company/balance.html')
         self.response.out.write(template.render(template_values)) 
 
+class AddBalancePage(webapp2.RequestHandler):
 
+    def get(self):   
         
+        template_values = {
+          
+        }
+        
+        template = jinja_environment.get_template('company/addbalance.html')
+        self.response.out.write(template.render(template_values)) 
+        
+    def post(self):   
+        
+        user = users.get_current_user()
+        
+        if (user and (user.nickname() == 'makaticondo4rent' or user.nickname() == 'goryo.webdev')):
+          
+            balance = Balance()
+            balance.ttype = self.request.get('type')
+            balance.amt = self.request.get('amt')
+            balance.description = float(self.request.get('description'))
+            balance.notes = float(self.request.get('notes'))
+            
+            balance.put()
+
+            self.response.out.write('Balance Added!')
+
+        else:    
+            self.redirect(users.create_login_url(self.request.uri))   
+
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/latestutilityentry', LatestUtilityEntry),
     ('/utilitiescomputation', UtilitiesComputationPage),
     ('/balance', BalancePage),
+    ('/addbalance', AddBalancePage)
 ], debug=True)
 
 
