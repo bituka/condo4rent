@@ -134,24 +134,34 @@ class BalancePage(webapp2.RequestHandler):
 
     def get(self):   
         
+        balances = db.GqlQuery("SELECT * FROM Balance")
+            
         template_values = {
-          
+            'balances': balances,
         }
         
         template = jinja_environment.get_template('company/balance.html')
         self.response.out.write(template.render(template_values)) 
+        
 
 class AddBalancePage(webapp2.RequestHandler):
-
+      
     def get(self):   
+      
+        user = users.get_current_user()
         
-        template_values = {
+        if (user and (user.nickname() == 'makaticondo4rent' or user.nickname() == 'goryo.webdev')):
+        
+          template_values = {
+            
+          }
           
-        }
+          template = jinja_environment.get_template('company/addbalance.html')
+          self.response.out.write(template.render(template_values)) 
         
-        template = jinja_environment.get_template('company/addbalance.html')
-        self.response.out.write(template.render(template_values)) 
-        
+        else:    
+            self.redirect(users.create_login_url(self.request.uri))   
+            
     def post(self):   
         
         user = users.get_current_user()
@@ -160,13 +170,13 @@ class AddBalancePage(webapp2.RequestHandler):
           
             balance = Balance()
             balance.ttype = self.request.get('type')
-            balance.amt = self.request.get('amt')
-            balance.description = float(self.request.get('description'))
-            balance.notes = float(self.request.get('notes'))
+            balance.amt = float(self.request.get('amt'))
+            balance.description = self.request.get('description')
+            balance.notes = self.request.get('notes')
             
             balance.put()
 
-            self.response.out.write('Balance Added!')
+            self.response.out.write('Balance Added! <a href="/addbalance">add more balance</a>')
 
         else:    
             self.redirect(users.create_login_url(self.request.uri))   
