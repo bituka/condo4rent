@@ -43,13 +43,13 @@
         <p class="lead">
           <form action="/addbalance" method="post">
             <div><label>Type:</label>
-              <input type="radio" name="type" value="male">Income<br>
-              <input type="radio" name="type" value="female">Expense
+              <input type="radio" name="type" value="Income">Income<br>
+              <input type="radio" name="type" value="Expense">Expense
             </div>
           <div><label></label>Amount<input type="number" step=0.01 name="amt" maxlength="20" /></div>          
           <div><label></label>Description<input type="text" step=0.01 name="description" maxlength="20" /></div>
           <div><label></label>Additional Notes<textarea  name="notes"></textarea></div>
-          <div><label>Transacation Date</label><input type="text" id="datepicker"> </div>
+          <div><label>Transacation Date(YYYY-MM-DD)</label> <input name="transaction_date" type="text" id="datepicker"> </div>
           
           <input type="submit" value="submit" class="btn btn-lg btn-success">
           </form>
@@ -73,7 +73,7 @@
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
      <script>
 $(function() {
-$( "#datepicker" ).datepicker();
+$( "#datepicker" ).datepicker({ dateFormat: "yy-mm-dd" });
 });
 </script>
   </body>
