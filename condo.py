@@ -9,15 +9,15 @@ import sys
 from datetime import datetime
 from google.appengine.ext import db
 from google.appengine.api import users
+import pprint
+
 
 
 jinja_environment = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
-# NUM_SHARDS = 20
 
-
-#models 
+#models
 class UtilitiesComputation(db.Model):
 	checkin_elec = db.FloatProperty()
 	checkout_elec = db.FloatProperty()
@@ -36,7 +36,7 @@ class Balance(db.Model):
 	transaction_date = db.DateProperty()
 
 class TotalIncome(db.Model):
-	totalincomeamt = db.FloatProperty(default=0)
+	totalincomeamt = db.FloatProperty(default=0.0)
 	
 class TotalExpense(db.Model):
 	totalexpenseamt = db.FloatProperty()
@@ -52,7 +52,6 @@ class MainPage(webapp2.RequestHandler):
 		
 		template = jinja_environment.get_template('public/index.html')
 		self.response.out.write(template.render(template_values))
-#TODO
 
 		
 class UtilitiesComputationPage(webapp2.RequestHandler):
@@ -67,7 +66,7 @@ class UtilitiesComputationPage(webapp2.RequestHandler):
 		template = jinja_environment.get_template('company/utilities_main.html')
 		self.response.out.write(template.render(template_values))
 
-	def post(self):   
+	def post(self):
 		
 		user = users.get_current_user()
 		
@@ -87,21 +86,21 @@ class UtilitiesComputationPage(webapp2.RequestHandler):
 		#    redirectUrl = "/view/key/%s/" % item.key()
 		#    self.redirect(redirectUrl)
 		#    test = utilitiescomputation.key().id()
-		#    print test 
+		#    print test
 
 			redirectUrl = "/latestutilityentry?id=%s" % utilitiescomputation.key()
-		#    print redirectUrl        
+		#    print redirectUrl
 
 			self.redirect(redirectUrl)
-		#    self.redirect('/latestutilityentry', utilitiescomputation.key().id())   
+		#    self.redirect('/latestutilityentry', utilitiescomputation.key().id())
 
-		else:    
-			self.redirect(users.create_login_url(self.request.uri))                 
+		else:
+			self.redirect(users.create_login_url(self.request.uri))
 
 #display latest added computation after adding entry
 class LatestUtilityEntry(webapp2.RequestHandler):
 
-	def get(self):   
+	def get(self):
 
 		user = users.get_current_user()
 
@@ -115,7 +114,7 @@ class LatestUtilityEntry(webapp2.RequestHandler):
 			elec_consume = utilitiescomputation.checkout_elec - utilitiescomputation.checkin_elec
 			water_consume = utilitiescomputation.checkout_water - utilitiescomputation.checkin_water
 
-			elec_charge = elec_consume * elec_cpu 
+			elec_charge = elec_consume * elec_cpu
 			water_charge = water_cpu * water_consume
 
 			total_utilities_charge = round(elec_charge + water_charge, 2)
@@ -125,8 +124,8 @@ class LatestUtilityEntry(webapp2.RequestHandler):
 				'elec_consume' : elec_consume,
 				'water_consume' : water_consume,
 				'utilitiescomputation': utilitiescomputation,
-				'water_charge' : water_charge,  
-				'elec_charge' : elec_charge,   
+				'water_charge' : water_charge,
+				'elec_charge' : elec_charge,
 				'elec_cpu' : elec_cpu,
 				'water_cpu' : water_cpu,
 				'total_utilities_charge' : total_utilities_charge,
@@ -134,16 +133,16 @@ class LatestUtilityEntry(webapp2.RequestHandler):
 			}
 			
 			template = jinja_environment.get_template('company/latestutilityentry_added.html')
-			self.response.out.write(template.render(template_values)) 
+			self.response.out.write(template.render(template_values))
 		else:
-			self.redirect(users.create_login_url(self.request.uri))    
+			self.redirect(users.create_login_url(self.request.uri))
 
 #display balance for ate dhanna
 class BalancePage(webapp2.RequestHandler):
 	
-	def get(self):   
+	def get(self):
 		
-		balances = db.GqlQuery("SELECT totalincomeamt FROM Balance")      
+		balances = db.GqlQuery("SELECT totalincomeamt FROM TotalIncome")
 		
 		
 		template_values = {
@@ -151,32 +150,31 @@ class BalancePage(webapp2.RequestHandler):
 		}
 		
 		template = jinja_environment.get_template('company/balance.html')
-		self.response.out.write(template.render(template_values)) 
+		self.response.out.write(template.render(template_values))
 
 class AddBalancePage(webapp2.RequestHandler):
 	  
-	def get(self):   
+	def get(self):
 	  
 		user = users.get_current_user()
 		
 		if (user and (user.nickname() == 'makaticondo4rent' or user.nickname() == 'goryo.webdev')):
 		
-		  template_values = {
-			
-		  }
-		  
-		  template = jinja_environment.get_template('company/addbalance.html')
-		  self.response.out.write(template.render(template_values)) 
-		
-		else:    
-			self.redirect(users.create_login_url(self.request.uri))   
+			template_values = {
 
-	def post(self):   
+			}
+
+			template = jinja_environment.get_template('company/addbalance.html')
+			self.response.out.write(template.render(template_values))
 		
+		else:
+			self.redirect(users.create_login_url(self.request.uri))
+  
+	def post(self):
 		user = users.get_current_user()
 		
 		if (user and (user.nickname() == 'makaticondo4rent' or user.nickname() == 'goryo.webdev')):
-		  
+    		  
 			# add entry to Balance Table
 			balance = Balance()
 			balance.ttype = self.request.get('type')
@@ -188,31 +186,46 @@ class AddBalancePage(webapp2.RequestHandler):
 			
 			# add Update or Add up to the Total Income or Expense
 			if (balance.ttype == 'Income'):
-			  #get Total Income value
-						  
-			#  shard_string_index = int(random.randint(0, NUM_SHARDS - 1))
-			#  totalincome = TotalIncome.get_by_id()
-		
-        totalincome = SELECT * FROM Model where __key__ = KEY('TotalIncome', 1)
+
+				q = db.Query(TotalIncome)
+				totalincome = q.get()
 		  
-			  if totalincome.totalincomeamt is None:
-				  totalincome = TotalIncome()
-          totalincome.totalincomeamt = balance.amt
-          totalincome.put()
-        
-        else:  
-  			  totalincome.totalincomeamt += balance.amt
-  			  totalincome.put()  
-  
-			  self.response.out.write(totalincome.totalincomeamt)
+				if not totalincome:
+					totalincome = TotalIncome()
+					totalincome.totalincomeamt = float(balance.amt)
+					totalincome.put()
+
+					#inserted
+					self.response.out.write(totalincome.totalincomeamt)
+				else:
+					#update existing
+					totalincome.totalincomeamt += float(balance.amt)
+					totalincome.put()
+
+					self.response.out.write(totalincome.totalincomeamt)
+  			 
 			 
-		  #     self.response.out.write('Balance Added! <a href="/addbalance">add more balance</a>
-		#            <a href="/balance">balance page</a>')
+			 
+			if (balance.ttype == 'Expense'):
+				
+				q = db.Query(TotalExpense)
+				totalexpense = q.get()
+		  
+				if not totalexpense:
+					totalexpense = TotalExpense()
+					totalexpense.totalexpenseamt = float(balance.amt)
+					totalexpense.put()
 
-		else:    
-			self.redirect(users.create_login_url(self.request.uri))   
+					#inserted
+					self.response.out.write(totalexpense.totalexpenseamt)
+				else:
+					#update existing
+					totalexpense.totalexpenseamt += float(balance.amt)
+					totalexpense.put()
 
-
+					self.response.out.write(totalexpense.totalexpenseamt)
+		else:
+			self.redirect(users.create_login_url(self.request.uri))
 
 
 app = webapp2.WSGIApplication([
