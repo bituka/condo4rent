@@ -138,15 +138,26 @@ class LatestUtilityEntry(webapp2.RequestHandler):
 			self.redirect(users.create_login_url(self.request.uri))
 
 #display balance for ate dhanna
+#TODO
 class BalancePage(webapp2.RequestHandler):
 	
 	def get(self):
 		
-		balances = db.GqlQuery("SELECT totalincomeamt FROM TotalIncome")
+		balances = db.GqlQuery("SELECT * FROM Balance ORDER BY date_created DESC LIMIT 30")
 		
+		q = db.Query(TotalExpense)
+		totalexpense = q.get()
 		
+		q = db.Query(TotalIncome)
+		totalincome = q.get()
+		
+		balanceamt = totalincome.totalincomeamt - totalexpense.totalexpenseamt
+    
 		template_values = {
 			'balances': balances,
+			'totalexpense': totalexpense.totalexpenseamt,
+			'totalincome': totalincome.totalincomeamt,
+			'balanceamt' : balanceamt
 		}
 		
 		template = jinja_environment.get_template('company/balance.html')
