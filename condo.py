@@ -11,8 +11,6 @@ from google.appengine.ext import db
 from google.appengine.api import users
 import pprint
 
-
-
 jinja_environment = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
