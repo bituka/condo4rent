@@ -29,7 +29,7 @@ class UtilitiesComputation(db.Model):
 	
 class Balance(db.Model):
 	ttype = db.StringProperty(required=True, default='Income')
-	amt = db.FloatProperty()
+	amt = db.FloatProperty(required=True, default=0.0)
 	description = db.StringProperty()
 	notes = db.StringProperty()
 	date_created = db.DateTimeProperty(auto_now_add=True)
@@ -39,7 +39,7 @@ class TotalIncome(db.Model):
 	totalincomeamt = db.FloatProperty(default=0.0)
 	
 class TotalExpense(db.Model):
-	totalexpenseamt = db.FloatProperty()
+	totalexpenseamt = db.FloatProperty(default=0.0)
 	
 	
 #contollers
@@ -228,16 +228,12 @@ class AddBalancePage(webapp2.RequestHandler):
 					totalexpense.totalexpenseamt = float(balance.amt)
 					totalexpense.put()
 
-					#inserted
-					
-					self.response.out.write('Added! <a href="/addbalance">Add more?</a> or <a href="/balance">Check balance</a>')
-				#	self.redirect('/addbalance', utilitiescomputation.key().id())
 				else:
 					#update existing
 					totalexpense.totalexpenseamt += float(balance.amt)
 					totalexpense.put()
 
-					self.response.out.write('Added! <a href="/addbalance">Add more?</a> or <a href="/balance">Check balance</a>')
+				self.response.out.write('Added! <a href="/addbalance">Add more?</a> or <a href="/balance">Check balance</a>')
 		else:
 			self.redirect(users.create_login_url(self.request.uri))
 
@@ -344,12 +340,19 @@ class DeleteBalanceEntry(webapp2.RequestHandler):
 		
 		if (balanceentry.ttype == 'Income'):
 		
-			self.response.out.write(balanceentry.amt)
 			q = db.Query(TotalIncome)
 			totalincome = q.get()
 			
 			totalincome.totalincomeamt -= float(balanceentry.amt)
 			totalincome.put()
+			
+		if (balanceentry.ttype == 'Expense'):
+		
+			q = db.Query(TotalExpense)
+			totalexpense = q.get()
+			
+			totalexpense.totalexpenseamt -= float(balanceentry.amt)
+			totalexpense.put()
 			
 		balanceentry.delete()
 		self.redirect('/admin')         
