@@ -28,7 +28,7 @@ class UtilitiesComputation(db.Model):
 	deposit = db.FloatProperty()
 	
 class Balance(db.Model):
-	ttype = db.StringProperty()
+	ttype = db.StringProperty(required=True, default='Income')
 	amt = db.FloatProperty()
 	description = db.StringProperty()
 	notes = db.StringProperty()
@@ -188,7 +188,7 @@ class AddBalancePage(webapp2.RequestHandler):
     		  
 			# add entry to Balance Table
 			balance = Balance()
-			balance.ttype = self.request.get('type')
+			balance.ttype = str(self.request.get('type'))
 			balance.amt = float(self.request.get('amt'))
 			balance.description = self.request.get('description')
 			balance.notes = self.request.get('notes')
@@ -207,13 +207,14 @@ class AddBalancePage(webapp2.RequestHandler):
 					totalincome.put()
 
 					#inserted
-					self.response.out.write(totalincome.totalincomeamt)
+					#self.response.out.write(totalincome.totalincomeamt)
+					self.response.out.write('Added! <a href="/addbalance">Add more?</a> or <a href="/balance">Check balance</a>')
 				else:
 					#update existing
 					totalincome.totalincomeamt += float(balance.amt)
 					totalincome.put()
 
-					self.response.out.write(totalincome.totalincomeamt)
+					self.response.out.write('Added! <a href="/addbalance">Add more?</a> or <a href="/balance">Check balance</a>')
   			 
 			 
 			 
@@ -228,23 +229,142 @@ class AddBalancePage(webapp2.RequestHandler):
 					totalexpense.put()
 
 					#inserted
-					self.response.out.write(totalexpense.totalexpenseamt)
+					
+					self.response.out.write('Added! <a href="/addbalance">Add more?</a> or <a href="/balance">Check balance</a>')
+				#	self.redirect('/addbalance', utilitiescomputation.key().id())
 				else:
 					#update existing
 					totalexpense.totalexpenseamt += float(balance.amt)
 					totalexpense.put()
 
-					self.response.out.write(totalexpense.totalexpenseamt)
+					self.response.out.write('Added! <a href="/addbalance">Add more?</a> or <a href="/balance">Check balance</a>')
 		else:
 			self.redirect(users.create_login_url(self.request.uri))
 
+class AdminPage(webapp2.RequestHandler):
+	  
+	def get(self):
+	  
+		user = users.get_current_user()
+		
+		if (user and (user.nickname() == 'makaticondo4rent' or user.nickname() == 'goryo.webdev')):
+		
+			
+			balances = db.GqlQuery("SELECT * FROM Balance ORDER BY date_created DESC LIMIT 30")
+		
+			q = db.Query(TotalExpense)
+			totalexpense = q.get()
+			
+			q = db.Query(TotalIncome)
+			totalincome = q.get()
+			
+			balanceamt = totalincome.totalincomeamt - totalexpense.totalexpenseamt
+		
+			template_values = {
+				'balances': balances,
+				'totalexpense': totalexpense.totalexpenseamt,
+				'totalincome': totalincome.totalincomeamt,
+				'balanceamt' : balanceamt
+			}
+			
+			template = jinja_environment.get_template('company/admin.html')
+			self.response.out.write(template.render(template_values))
+			
+		
+		else:
+			self.redirect(users.create_login_url(self.request.uri))
+  
+	def post(self):
+		user = users.get_current_user()
+		
+		if (user and (user.nickname() == 'makaticondo4rent' or user.nickname() == 'goryo.webdev')):
+    		  
+			# add entry to Balance Table
+			balance = Balance()
+			balance.ttype = str(self.request.get('type'))
+			balance.amt = float(self.request.get('amt'))
+			balance.description = self.request.get('description')
+			balance.notes = self.request.get('notes')
+			balance.transaction_date = datetime.strptime(self.request.get('transaction_date'), '%Y-%m-%d').date()
+			balance.put()
+			
+			# add Update or Add up to the Total Income or Expense
+			if (balance.ttype == 'Income'):
+
+				q = db.Query(TotalIncome)
+				totalincome = q.get()
+		  
+				if not totalincome:
+					totalincome = TotalIncome()
+					totalincome.totalincomeamt = float(balance.amt)
+					totalincome.put()
+
+					#inserted
+					#self.response.out.write(totalincome.totalincomeamt)
+					self.response.out.write('Added! <a href="/addbalance">Add more?</a> or <a href="/balance">Check balance</a>')
+				else:
+					#update existing
+					totalincome.totalincomeamt += float(balance.amt)
+					totalincome.put()
+
+					self.response.out.write('Added! <a href="/addbalance">Add more?</a> or <a href="/balance">Check balance</a>')
+  			 
+			 
+			 
+			if (balance.ttype == 'Expense'):
+				
+				q = db.Query(TotalExpense)
+				totalexpense = q.get()
+		  
+				if not totalexpense:
+					totalexpense = TotalExpense()
+					totalexpense.totalexpenseamt = float(balance.amt)
+					totalexpense.put()
+
+					#inserted
+					
+					self.response.out.write('Added! <a href="/addbalance">Add more?</a> or <a href="/balance">Check balance</a>')
+				#	self.redirect('/addbalance', utilitiescomputation.key().id())
+				else:
+					#update existing
+					totalexpense.totalexpenseamt += float(balance.amt)
+					totalexpense.put()
+
+					self.response.out.write('Added! <a href="/addbalance">Add more?</a> or <a href="/balance">Check balance</a>')
+		else:
+			self.redirect(users.create_login_url(self.request.uri))			
+			
+class DeleteBalanceEntry(webapp2.RequestHandler):
+
+    def get(self):
+		
+		balanceentry = db.get(self.request.get('id'))
+		
+		# self.response.out.write(balanceentry.amt)
+		
+		if (balanceentry.ttype == 'Income'):
+		
+			self.response.out.write(balanceentry.amt)
+			q = db.Query(TotalIncome)
+			totalincome = q.get()
+			
+			totalincome.totalincomeamt -= float(balanceentry.amt)
+			totalincome.put()
+			
+		balanceentry.delete()
+		self.redirect('/admin')         
+		
+		
 
 app = webapp2.WSGIApplication([
 	('/', MainPage),
 	('/latestutilityentry', LatestUtilityEntry),
 	('/utilitiescomputation', UtilitiesComputationPage),
 	('/balance', BalancePage),
-	('/addbalance', AddBalancePage)
+	('/addbalance', AddBalancePage),
+	('/deletebalanceentry', DeleteBalanceEntry),
+	('/admin', AdminPage)
+       
 ], debug=True)
 
 
