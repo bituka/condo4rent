@@ -70,11 +70,14 @@ script: condo.application
                     </tr>
                     {% endfor %}
                     
-                    
+                     
                     
                   </tbody>
                 </table>
               </div>
+              {% if cursor %}
+                <a href="balance/?bookmark={{ bookmark }}">Next</a>
+              {% endif %}
               <!-- /.table-responsive -->
               
               

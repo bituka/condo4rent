@@ -140,9 +140,40 @@ class LatestUtilityEntry(webapp2.RequestHandler):
 class BalancePage(webapp2.RequestHandler):
 	
 	def get(self):
+		'''
+		query = db.GqlQuery("SELECT * FROM Balance ORDER BY date_created DESC LIMIT 30")
 		
-		balances = db.GqlQuery("SELECT * FROM Balance ORDER BY date_created DESC LIMIT 30")
+		bookmark = self.request.get('cursor')
+
+		if cursor: query.with_cursor(cursor)
+		balances = query.fetch(5)
+		cursor = query.cursor()
+		'''
+
 		
+		# q = db.Query(Balance)
+		# q.order("-date_created")
+		# balances = q.run()
+
+		
+		
+		PAGE_SIZE = 5
+
+		cursor = None
+		bookmark = self.request.get('bookmark')
+
+		if bookmark:
+			cursor = db.Cursor.from_websafe_string(bookmark)
+
+		query = Balance.all().order("-date_created")
+		balances, next_cursor, more = query.fetch(PAGE_SIZE,start_cursor=cursor)
+
+		next_bookmark = None
+
+		if more:
+			next_bookmark = next_cursor.to_websafe_string()
+
+
 		q = db.Query(TotalExpense)
 		totalexpense = q.get()
 		
@@ -152,6 +183,8 @@ class BalancePage(webapp2.RequestHandler):
 		balanceamt = totalincome.totalincomeamt - totalexpense.totalexpenseamt
     
 		template_values = {
+			'bookmark': next_bookmark,
+			'cursor': cursor,
 			'balances': balances,
 			'totalexpense': totalexpense.totalexpenseamt,
 			'totalincome': totalincome.totalincomeamt,
