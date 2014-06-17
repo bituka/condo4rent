@@ -11,6 +11,7 @@ from google.appengine.ext import db
 from google.appengine.api import users
 import pprint
 
+
 jinja_environment = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
@@ -140,23 +141,32 @@ class LatestUtilityEntry(webapp2.RequestHandler):
 class BalancePage(webapp2.RequestHandler):
 	
 	def get(self):
-		'''
+		
 		query = db.GqlQuery("SELECT * FROM Balance ORDER BY date_created DESC LIMIT 30")
 		
-		bookmark = self.request.get('cursor')
+		cursor = self.request.get('cursor')
 
-		if cursor: query.with_cursor(cursor)
-		balances = query.fetch(5)
+		if cursor: query.with_cursor(start_cursor=cursor)
+		balances = query.fetch(30)
 		cursor = query.cursor()
 		'''
+		
+		query = db.GqlQuery("SELECT * FROM Item ORDER BY date DESC")
+	#	cursor = self.request.get('cursor')
+	#	if cursor: query.with_cursor(cursor)
+		balances = query.fetch(5)
+	#	cursor = query.cursor()
 
-		
-		# q = db.Query(Balance)
-		# q.order("-date_created")
-		# balances = q.run()
 
+	#	self.response.out.write('<a href="yoururl?cursor=%s">Next Page</a>' % cursor)
+	
 		
+		q = db.Query(Balance)
+		q.order("-date_created")
+		balances = q.run()
+		'''
 		
+		'''
 		PAGE_SIZE = 5
 
 		cursor = None
@@ -166,13 +176,13 @@ class BalancePage(webapp2.RequestHandler):
 			cursor = db.Cursor.from_websafe_string(bookmark)
 
 		query = Balance.all().order("-date_created")
-		balances, next_cursor, more = query.fetch(PAGE_SIZE,start_cursor=cursor)
+		balances, next_cursor, more = query.run(limit=PAGE_SIZE,start_cursor=cursor)
 
 		next_bookmark = None
 
 		if more:
 			next_bookmark = next_cursor.to_websafe_string()
-
+		'''
 
 		q = db.Query(TotalExpense)
 		totalexpense = q.get()
@@ -183,7 +193,7 @@ class BalancePage(webapp2.RequestHandler):
 		balanceamt = totalincome.totalincomeamt - totalexpense.totalexpenseamt
     
 		template_values = {
-			'bookmark': next_bookmark,
+	#		'bookmark': next_bookmark,
 			'cursor': cursor,
 			'balances': balances,
 			'totalexpense': totalexpense.totalexpenseamt,
