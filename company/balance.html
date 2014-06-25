@@ -75,8 +75,10 @@ script: condo.application
                   </tbody>
                 </table>
               </div>
+
               {% if cursor %}
-                <a href="balance/?bookmark={{ bookmark }}">Next</a>
+                 <a href="javascript:history.back()">Previous</a>
+                <a href="balance?cursor={{ cursor }}">Next</a>
               {% endif %}
               <!-- /.table-responsive -->
               

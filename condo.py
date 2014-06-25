@@ -11,6 +11,7 @@ from google.appengine.ext import db
 from google.appengine.api import users
 import pprint
 
+
 jinja_environment = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
@@ -59,7 +60,7 @@ class UtilitiesComputationPage(webapp2.RequestHandler):
 		user = users.get_current_user()
 		
 		if (user and (user.nickname() == 'makaticondo4rent' or user.nickname() == 'goryo.webdev')):
-			
+		
 			template_values = {
 				
 			}
@@ -69,7 +70,6 @@ class UtilitiesComputationPage(webapp2.RequestHandler):
 			
 		else:
 			self.redirect(users.create_login_url(self.request.uri))
-		
 
 	def post(self):
 		
@@ -147,27 +147,26 @@ class LatestUtilityEntry(webapp2.RequestHandler):
 class BalancePage(webapp2.RequestHandler):
 	
 	def get(self):
-		'''
+		
 		query = db.GqlQuery("SELECT * FROM Balance ORDER BY date_created DESC LIMIT 30")
 		
-		bookmark = self.request.get('cursor')
+		cursor = self.request.get('cursor')
 
-		if cursor: query.with_cursor(cursor)
-		balances = query.fetch(5)
+		if cursor: query.with_cursor(start_cursor=cursor)
+		balances = query.fetch(30)
 		cursor = query.cursor()
 		'''
 		
 		query = db.GqlQuery("SELECT * FROM Item ORDER BY date DESC")
-		balances_cursor = self.request.get('cursor')
-		if balances_cursor: 
-			balances.with_cursor(start_cursor=balances_cursor)
-		balances = query.fetch(5)	
-		balances_cursor = query.cursor()
-		
+	#	cursor = self.request.get('cursor')
+	#	if cursor: query.with_cursor(cursor)
+		balances = query.fetch(5)
+	#	cursor = query.cursor()
+
 
 	#	self.response.out.write('<a href="yoururl?cursor=%s">Next Page</a>' % cursor)
 	
-		'''
+		
 		q = db.Query(Balance)
 		q.order("-date_created")
 		balances = q.run()
@@ -200,8 +199,8 @@ class BalancePage(webapp2.RequestHandler):
 		balanceamt = totalincome.totalincomeamt - totalexpense.totalexpenseamt
     
 		template_values = {
-			'balances': balances,
-			'balances_cursor': balances_cursor,
+	#		'bookmark': next_bookmark,
+			'cursor': cursor,
 			'balances': balances,
 			'totalexpense': totalexpense.totalexpenseamt,
 			'totalincome': totalincome.totalincomeamt,
@@ -417,5 +416,6 @@ app = webapp2.WSGIApplication([
 	('/admin', AdminPage)
        
 ], debug=True)
+
 
 
