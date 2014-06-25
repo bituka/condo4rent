@@ -56,19 +56,26 @@ class UtilitiesComputationPage(webapp2.RequestHandler):
 
 	def get(self):
 
-
-		template_values = {
-			
-		}
+		user = users.get_current_user()
 		
-		template = jinja_environment.get_template('company/utilities_main.html')
-		self.response.out.write(template.render(template_values))
+		if (user and (user.nickname() == 'makaticondo4rent' or user.nickname() == 'goryo.webdev')):
+			
+			template_values = {
+				
+			}
+			
+			template = jinja_environment.get_template('company/utilities_main.html')
+			self.response.out.write(template.render(template_values))
+			
+		else:
+			self.redirect(users.create_login_url(self.request.uri))
+		
 
 	def post(self):
 		
 		user = users.get_current_user()
 		
-		if (user and user.nickname() == 'makaticondo4rent'):
+		if (user and (user.nickname() == 'makaticondo4rent' or user.nickname() == 'goryo.webdev')):
 		  
 			utilitiescomputation = UtilitiesComputation()
 			utilitiescomputation.tenant_name = self.request.get('tenant_name')
@@ -102,7 +109,7 @@ class LatestUtilityEntry(webapp2.RequestHandler):
 
 		user = users.get_current_user()
 
-		if (user and user.nickname() == 'makaticondo4rent'):
+		if (user and (user.nickname() == 'makaticondo4rent' or user.nickname() == 'goryo.webdev')):
 			#cpu means charge per unit
 			elec_cpu = 12
 			water_cpu = 18
@@ -149,14 +156,24 @@ class BalancePage(webapp2.RequestHandler):
 		balances = query.fetch(5)
 		cursor = query.cursor()
 		'''
+		
+		query = db.GqlQuery("SELECT * FROM Item ORDER BY date DESC")
+		balances_cursor = self.request.get('cursor')
+		if balances_cursor: 
+			balances.with_cursor(start_cursor=balances_cursor)
+		balances = query.fetch(5)	
+		balances_cursor = query.cursor()
+		
 
+	#	self.response.out.write('<a href="yoururl?cursor=%s">Next Page</a>' % cursor)
+	
+		'''
+		q = db.Query(Balance)
+		q.order("-date_created")
+		balances = q.run()
+		'''
 		
-		# q = db.Query(Balance)
-		# q.order("-date_created")
-		# balances = q.run()
-
-		
-		
+		'''
 		PAGE_SIZE = 5
 
 		cursor = None
@@ -166,13 +183,13 @@ class BalancePage(webapp2.RequestHandler):
 			cursor = db.Cursor.from_websafe_string(bookmark)
 
 		query = Balance.all().order("-date_created")
-		balances, next_cursor, more = query.fetch(PAGE_SIZE,start_cursor=cursor)
+		balances, next_cursor, more = query.run(limit=PAGE_SIZE,start_cursor=cursor)
 
 		next_bookmark = None
 
 		if more:
 			next_bookmark = next_cursor.to_websafe_string()
-
+		'''
 
 		q = db.Query(TotalExpense)
 		totalexpense = q.get()
@@ -183,8 +200,8 @@ class BalancePage(webapp2.RequestHandler):
 		balanceamt = totalincome.totalincomeamt - totalexpense.totalexpenseamt
     
 		template_values = {
-			'bookmark': next_bookmark,
-			'cursor': cursor,
+			'balances': balances,
+			'balances_cursor': balances_cursor,
 			'balances': balances,
 			'totalexpense': totalexpense.totalexpenseamt,
 			'totalincome': totalincome.totalincomeamt,
