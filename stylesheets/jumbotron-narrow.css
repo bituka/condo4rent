@@ -2,6 +2,8 @@
 body {
   padding-top: 20px;
   padding-bottom: 20px;
+  background-image: url('../img/bg1.png');
+/*  background-image: linear-gradient(to bottom, rgb(0, 150, 60) 0px, rgb(34, 34, 34) 100%); */
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -35,6 +37,8 @@ body {
 @media (min-width: 768px) {
   .container {
     max-width: 730px;
+    background-image: url('../img/bg1.png');
+
   }
 }
 .container-narrow > hr {

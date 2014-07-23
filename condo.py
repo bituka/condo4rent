@@ -57,19 +57,25 @@ class UtilitiesComputationPage(webapp2.RequestHandler):
 
 	def get(self):
 
-
-		template_values = {
-			
-		}
+		user = users.get_current_user()
 		
-		template = jinja_environment.get_template('company/utilities_main.html')
-		self.response.out.write(template.render(template_values))
+		if (user and (user.nickname() == 'makaticondo4rent' or user.nickname() == 'goryo.webdev')):
+		
+			template_values = {
+				
+			}
+			
+			template = jinja_environment.get_template('company/utilities_main.html')
+			self.response.out.write(template.render(template_values))
+			
+		else:
+			self.redirect(users.create_login_url(self.request.uri))
 
 	def post(self):
 		
 		user = users.get_current_user()
 		
-		if (user and user.nickname() == 'makaticondo4rent'):
+		if (user and (user.nickname() == 'makaticondo4rent' or user.nickname() == 'goryo.webdev')):
 		  
 			utilitiescomputation = UtilitiesComputation()
 			utilitiescomputation.tenant_name = self.request.get('tenant_name')
@@ -103,7 +109,7 @@ class LatestUtilityEntry(webapp2.RequestHandler):
 
 		user = users.get_current_user()
 
-		if (user and user.nickname() == 'makaticondo4rent'):
+		if (user and (user.nickname() == 'makaticondo4rent' or user.nickname() == 'goryo.webdev')):
 			#cpu means charge per unit
 			elec_cpu = 12
 			water_cpu = 18
@@ -410,5 +416,6 @@ app = webapp2.WSGIApplication([
 	('/admin', AdminPage)
        
 ], debug=True)
+
 
 
