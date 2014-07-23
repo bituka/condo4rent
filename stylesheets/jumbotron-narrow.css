@@ -2,7 +2,8 @@
 body {
   padding-top: 20px;
   padding-bottom: 20px;
-  background-image: url('../img/bg1.PNG');
+  background-image: url('../img/condologo2_200px.png');
+/*  background-image: linear-gradient(to bottom, rgb(0, 150, 60) 0px, rgb(34, 34, 34) 100%); */
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
